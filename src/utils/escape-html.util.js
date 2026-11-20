@@ -1,0 +1,15 @@
+const escapeHTML = (value = "") => {
+    return String(value).replace(/[&<>"']/g, (character) => {
+        const entities = {
+            "&": "&amp;",
+            "<": "&lt;",
+            ">": "&gt;",
+            '"': "&quot;",
+            "'": "&#39;",
+        };
+
+        return entities[character];
+    });
+};
+
+module.exports = { escapeHTML };
