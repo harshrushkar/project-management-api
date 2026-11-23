@@ -10,7 +10,8 @@ const {
     deleteOrganization,
     getInviteableUsers,
     createInvitation,
-    handleInvitationAction
+    handleInvitationAction,
+    getOrganizationInvitations
 } = require("./organization.controller");
 
 const {
@@ -95,6 +96,11 @@ router.patch(
     handleInvitationAction
 );
 
+router.get(
+    "/:organizationId/invitations",
+    authenticateUser,
+    getOrganizationInvitations
+);
 
 
 module.exports = router;

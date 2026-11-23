@@ -688,6 +688,101 @@ const handleInvitationActionService = async (
     }
 };
 
+const getOrganizationInvitationsService = async (
+    organizationId,
+    userId
+) => {
+    // 1. Check organization and requester membership
+    const membership = await prisma.organizationMember.findUnique({
+        where: {
+            userId_organizationId: {
+                userId,
+                organizationId,
+            },
+        },
+    });
+
+    if (!membership) {
+        const error = new Error(
+            "You are not a member of this organization"
+        );
+        error.statusCode = 403;
+        throw error;
+    }
+
+    // 2. Check organization is active
+    const organization = await prisma.organization.findUnique({
+        where: {
+            id: organizationId,
+        },
+        select: {
+            id: true,
+            isActive: true,
+        },
+    });
+
+    if (!organization || !organization.isActive) {
+        const error = new Error(
+            "Organization not found or inactive"
+        );
+        error.statusCode = 404;
+        throw error;
+    }
+
+    // 3. OWNER / ADMIN can see invitations sent by the organization
+    if (["OWNER", "ADMIN"].includes(membership.role)) {
+        return prisma.organizationInvitation.findMany({
+            where: {
+                organizationId,
+            },
+            include: {
+                invitedUser: {
+                    select: {
+                        id: true,
+                        name: true,
+                        email: true,
+                    },
+                },
+                invitedBy: {
+                    select: {
+                        id: true,
+                        name: true,
+                        email: true,
+                    },
+                },
+            },
+            orderBy: {
+                createdAt: "desc",
+            },
+        });
+    }
+
+    // 4. Other members can only see invitations received by themselves
+    return prisma.organizationInvitation.findMany({
+        where: {
+            organizationId,
+            invitedUserId: userId,
+        },
+        include: {
+            organization: {
+                select: {
+                    id: true,
+                    name: true,
+                },
+            },
+            invitedBy: {
+                select: {
+                    id: true,
+                    name: true,
+                    email: true,
+                },
+            },
+        },
+        orderBy: {
+            createdAt: "desc",
+        },
+    });
+};
 
 
 module.exports = {
@@ -698,5 +793,6 @@ module.exports = {
     deleteOrganizationService,
     getInviteableUsersService,
     createInvitationService,
-    handleInvitationActionService
+    handleInvitationActionService,
+    getOrganizationInvitationsService
 };

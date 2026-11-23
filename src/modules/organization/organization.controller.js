@@ -6,7 +6,8 @@ const {
     updateOrganizationService,
     deleteOrganizationService,
     getInviteableUsersService,
-    createInvitationService
+    createInvitationService,
+    getOrganizationInvitationsService
 } = require("./organization.service");
 const {
     uploadToCloudinary
@@ -323,6 +324,32 @@ const handleInvitationAction = async (req, res) => {
     }
 };
 
+const getOrganizationInvitations = async (req, res) => {
+    try {
+        const { organizationId } = req.params;
+        const userId = req.user.id;
+
+        const invitations = await getOrganizationInvitationsService(
+            organizationId,
+            userId
+        );
+
+        return res.status(200).json({
+            success: true,
+            message: "Invitations fetched successfully",
+            data: invitations,
+        });
+    } catch (error) {
+        console.error("Get organization invitations error:", error);
+
+        return res.status(error.statusCode || 500).json({
+            success: false,
+            message:
+                error.message || "Failed to fetch organization invitations",
+        });
+    }
+};
+
 
 module.exports = {
     createOrganization,
@@ -332,5 +359,6 @@ module.exports = {
     deleteOrganization,
     getInviteableUsers,
     createInvitation,
-    handleInvitationAction
+    handleInvitationAction,
+    getOrganizationInvitations
 };

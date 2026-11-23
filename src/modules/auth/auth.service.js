@@ -110,6 +110,9 @@ const verifyEmailService = async ({ email, otp }) => {
         },
     });
 
+    console.log("EMAIL VERIFIED:", user?.emailVerified);
+    console.log("EMAIL VERIFICATION:", user?.emailVerification);
+
     if (!user || user.emailVerified || !user.emailVerification) {
         throw new Error("Invalid or expired verification code");
     }

@@ -3,13 +3,17 @@ const { registerUserService, verifyEmailService, resendOTPService, loginUserServ
 
 const registerUser = async (req, res) => {
     try {
-        const { name, email, password } = req.body;
+        console.log("RAW REQUEST BODY:", req.body);
 
+        const { name, email, password } = req.body;
         const newUser = await registerUserService({
             name,
             email,
             password,
         });
+
+        console.log("EMAIL FROM REQUEST:", req.body.email);
+        console.log("EMAIL SENT TO SERVICE:", email);
 
         return res.status(201).json({
             success: true,
