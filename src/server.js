@@ -35,7 +35,6 @@ app.use("/api/organizations", organizationRoutes);
 app.use("/api/organizations", projectRoutes);
 app.use("/api/organizations", taskRoutes);
 
-
 if (require.main === module) {
     const PORT = process.env.PORT || 3000;
 
