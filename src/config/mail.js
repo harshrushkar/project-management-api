@@ -10,20 +10,5 @@ const transporter = nodemailer.createTransport({
     },
 });
 
-console.log("SMTP CONFIG:", {
-    host: "smtp.gmail.com",
-    port: 587,
-    secure: false,
-    emailUserConfigured: !!process.env.EMAIL_USER,
-    emailPassConfigured: !!process.env.EMAIL_PASS,
-});
-
-transporter.verify((error, success) => {
-    if (error) {
-        console.error("SMTP VERIFY FAILED:", error.message);
-    } else {
-        console.log("SMTP SERVER READY");
-    }
-});
 
 module.exports = transporter;
