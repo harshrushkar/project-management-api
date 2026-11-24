@@ -11,7 +11,7 @@ const options = {
         },
         servers: [
             {
-                url: "https://project-management-api-100a.onrender.com/api",
+                url: "https://project-management-api-one.vercel.app",
                 description: "Production server",
             },
             {
