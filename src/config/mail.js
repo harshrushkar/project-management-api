@@ -18,4 +18,12 @@ console.log("SMTP CONFIG:", {
     emailPassConfigured: !!process.env.EMAIL_PASS,
 });
 
+transporter.verify((error, success) => {
+    if (error) {
+        console.error("SMTP VERIFY FAILED:", error.message);
+    } else {
+        console.log("SMTP SERVER READY");
+    }
+});
+
 module.exports = transporter;
