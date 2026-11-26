@@ -1,4 +1,5 @@
 const swaggerJsdoc = require("swagger-jsdoc");
+const path = require("path");
 
 const options = {
     definition: {
@@ -11,12 +12,12 @@ const options = {
         },
         servers: [
             {
-                url: "https://project-management-api-one.vercel.app",
-                description: "Production server",
+                url: "https://project-management-api-one.vercel.app/api",
+                description: "Vercel production server",
             },
             {
                 url: "http://localhost:3000/api",
-                description: "Local server",
+                description: "Local development server",
             },
         ],
         tags: [
@@ -402,10 +403,10 @@ const options = {
     },
 
     apis: [
-        "./src/docs/auth.swagger.js",
-        "./src/docs/organization.swagger.js",
-        "./src/docs/project.swagger.js",
-        "./src/docs/task.swagger.js",
+        path.join(__dirname, "../docs/auth.swagger.js"),
+        path.join(__dirname, "../docs/organization.swagger.js"),
+        path.join(__dirname, "../docs/project.swagger.js"),
+        path.join(__dirname, "../docs/task.swagger.js"),
     ],
 };
 
